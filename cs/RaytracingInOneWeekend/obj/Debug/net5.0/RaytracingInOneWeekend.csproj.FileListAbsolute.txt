@@ -1,0 +1,15 @@
+/Users/amit/raytracing/cs/RaytracingInOneWeekend/bin/Debug/net5.0/RaytracingInOneWeekend.deps.json
+/Users/amit/raytracing/cs/RaytracingInOneWeekend/bin/Debug/net5.0/RaytracingInOneWeekend.runtimeconfig.json
+/Users/amit/raytracing/cs/RaytracingInOneWeekend/bin/Debug/net5.0/RaytracingInOneWeekend.runtimeconfig.dev.json
+/Users/amit/raytracing/cs/RaytracingInOneWeekend/bin/Debug/net5.0/RaytracingInOneWeekend.dll
+/Users/amit/raytracing/cs/RaytracingInOneWeekend/bin/Debug/net5.0/ref/RaytracingInOneWeekend.dll
+/Users/amit/raytracing/cs/RaytracingInOneWeekend/bin/Debug/net5.0/RaytracingInOneWeekend.pdb
+/Users/amit/raytracing/cs/RaytracingInOneWeekend/obj/Debug/net5.0/RaytracingInOneWeekend.csprojAssemblyReference.cache
+/Users/amit/raytracing/cs/RaytracingInOneWeekend/obj/Debug/net5.0/RaytracingInOneWeekend.GeneratedMSBuildEditorConfig.editorconfig
+/Users/amit/raytracing/cs/RaytracingInOneWeekend/obj/Debug/net5.0/RaytracingInOneWeekend.AssemblyInfoInputs.cache
+/Users/amit/raytracing/cs/RaytracingInOneWeekend/obj/Debug/net5.0/RaytracingInOneWeekend.AssemblyInfo.cs
+/Users/amit/raytracing/cs/RaytracingInOneWeekend/obj/Debug/net5.0/RaytracingInOneWeekend.csproj.CoreCompileInputs.cache
+/Users/amit/raytracing/cs/RaytracingInOneWeekend/obj/Debug/net5.0/RaytracingInOneWeekend.dll
+/Users/amit/raytracing/cs/RaytracingInOneWeekend/obj/Debug/net5.0/ref/RaytracingInOneWeekend.dll
+/Users/amit/raytracing/cs/RaytracingInOneWeekend/obj/Debug/net5.0/RaytracingInOneWeekend.pdb
+/Users/amit/raytracing/cs/RaytracingInOneWeekend/obj/Debug/net5.0/RaytracingInOneWeekend.genruntimeconfig.cache
