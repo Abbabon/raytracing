@@ -11,11 +11,35 @@ namespace RaytracingInOneWeekend
         
         static Vec3 RayColor(Ray ray)
         {
+            var sphereCenter = new Vec3(0, 0, -1);
+            var t = HitSphere(sphereCenter, 0.5, ray);
+            if (t > 0)
+            {
+                var N = Vec3.UnitVector(ray.PointAt(t) - sphereCenter);
+                return 0.5 * new Vec3(N.X+1, N.Y+1, N.Z+1);
+            }
+            
             var unitDirection = Vec3.UnitVector(ray.Direction);
-            
-            var t = 0.5 * (unitDirection.Y + 1);
-            
+            t = 0.5 * (unitDirection.Y + 1);
             return (1.0 - t) * UnitVector + t * Background;
+        }
+
+        private static double HitSphere(Vec3 sphereCenter, double radius, Ray ray)
+        {
+            Vec3 originMinusCenter = ray.Origin - sphereCenter;
+            var a = ray.Direction.SquaredLength();
+            var half_b = Vec3.Dot(originMinusCenter, ray.Direction);
+            var c = originMinusCenter.SquaredLength() - radius*radius;
+            
+            var discriminant = half_b * half_b - a * c;
+            if (discriminant < 0)
+            {
+                return -1.0;
+            }
+            else
+            {
+                return (-b - Math.Sqrt(discriminant)) / (2.0 * a);
+            }
         }
 
         static void Main()
@@ -33,16 +57,10 @@ namespace RaytracingInOneWeekend
             var viewportHeight = 2.0f;
             var viewportWidth = aspectRatio * viewportHeight;
             var focalLength = 1.0;
-            stderr.WriteLine($"{viewportWidth}, {viewportHeight}, {focalLength}");
-            
             var origin = new Vec3(0, 0, 0);
-            stderr.WriteLine($"{origin.X}, {origin.Y}, {origin.Z}");
             var horizontalVector = new Vec3(viewportWidth, 0, 0);
-            stderr.WriteLine($"{horizontalVector.X}, {horizontalVector.Y}, {horizontalVector.Z}");
             var verticalVector = new Vec3(0, viewportHeight, 0);
-            stderr.WriteLine($"{verticalVector.X}, {verticalVector.Y}, {verticalVector.Z}");
             var lowerLeftCorner = origin - horizontalVector/2.0 - verticalVector/2.0 - new Vec3(0, 0, focalLength);
-            stderr.WriteLine($"{lowerLeftCorner.X}, {lowerLeftCorner.Y}, {lowerLeftCorner.Z}");
             
             //render:
 
