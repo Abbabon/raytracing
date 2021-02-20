@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using RayTracingInOneWeekend;
 
 namespace RaytracingInOneWeekend
 {
@@ -9,18 +10,16 @@ namespace RaytracingInOneWeekend
         static readonly Vec3 ZeroVector = new Vec3(0, 0, 0);
         static readonly Vec3 Background = new Vec3(0.5, 0.7, 1);
         
-        static Vec3 RayColor(Ray ray)
+        static Vec3 RayColor(Ray ray, HitableItems world)
         {
-            var sphereCenter = new Vec3(0, 0, -1);
-            var t = HitSphere(sphereCenter, 0.5, ray);
-            if (t > 0)
+            var record = new HitRecord();
+            if (world.Hit(ray, 0.001, double.MaxValue, ref record))
             {
-                var N = Vec3.UnitVector(ray.PointAt(t) - sphereCenter);
-                return 0.5 * new Vec3(N.X+1, N.Y+1, N.Z+1);
+                return 0.5 * (record.Normal + UnitVector);
             }
             
             var unitDirection = Vec3.UnitVector(ray.Direction);
-            t = 0.5 * (unitDirection.Y + 1);
+            var t = 0.5 * (unitDirection.Y + 1);
             return (1.0 - t) * UnitVector + t * Background;
         }
 
@@ -30,7 +29,6 @@ namespace RaytracingInOneWeekend
             var a = ray.Direction.SquaredLength();
             var half_b = Vec3.Dot(originMinusCenter, ray.Direction);
             var c = originMinusCenter.SquaredLength() - radius*radius;
-            
             var discriminant = half_b * half_b - a * c;
             if (discriminant < 0)
             {
@@ -38,7 +36,7 @@ namespace RaytracingInOneWeekend
             }
             else
             {
-                return (-b - Math.Sqrt(discriminant)) / (2.0 * a);
+                return (- half_b - Math.Sqrt(discriminant)) / (2.0 * a);
             }
         }
 
@@ -52,8 +50,14 @@ namespace RaytracingInOneWeekend
             var imageWidth = 400;
             var imageHeight = imageWidth / aspectRatio;
             
-            //camera:
+            // World
+            var world = new HitableItems(new Hitable[]
+            {
+                new Sphere(new Vec3(0,0,-1), 0.5),
+                new Sphere(new Vec3(0,-100.5,-1), 100)
+            });
             
+            //camera:
             var viewportHeight = 2.0f;
             var viewportWidth = aspectRatio * viewportHeight;
             var focalLength = 1.0;
@@ -71,22 +75,10 @@ namespace RaytracingInOneWeekend
                 stderr.Write($"Scanlines remaining: {y} \r");
                 for (int x = 0; x < imageWidth; x++)
                 {
-                    //// 1.0 gradients
-                    // var r = (double) x / (imageWidth-1);
-                    // var g = (double) y / (imageHeight-1);
-                    // var b = 0.25f;
-                    //
-                    // var intR = (int) (255.99 * r);
-                    // var intG = (int) (255.99 * g);
-                    // var intB = (int) (255.99 * b);
-                    
-                    //stdout.WriteLine($"{intR} {intG} {intB}");
-                    
-                    // 2.0 ray gradients
                     var u = (double) x / (imageWidth-1);
                     var v = (double) y / (imageHeight-1);
                     var ray = new Ray(origin, lowerLeftCorner + u*horizontalVector + v*verticalVector - origin);
-                    var color = RayColor(ray);
+                    var color = RayColor(ray, world);
                     WriteColor(stdout, color);
                 }    
             }
