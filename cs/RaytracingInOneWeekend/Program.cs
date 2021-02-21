@@ -45,29 +45,23 @@ namespace RaytracingInOneWeekend
             var stdout = new StreamWriter(Console.OpenStandardOutput()) {AutoFlush = true};
             var stderr = new StreamWriter(Console.OpenStandardError()) {AutoFlush = true};
             
-            //image:
+            // Image:
             var aspectRatio = 16.0 / 9.0;
             var imageWidth = 400;
             var imageHeight = imageWidth / aspectRatio;
             
-            // World
+            // World:
             var world = new HitableItems(new Hitable[]
             {
                 new Sphere(new Vec3(0,0,-1), 0.5),
                 new Sphere(new Vec3(0,-100.5,-1), 100)
             });
             
-            //camera:
-            var viewportHeight = 2.0f;
-            var viewportWidth = aspectRatio * viewportHeight;
-            var focalLength = 1.0;
-            var origin = new Vec3(0, 0, 0);
-            var horizontalVector = new Vec3(viewportWidth, 0, 0);
-            var verticalVector = new Vec3(0, viewportHeight, 0);
-            var lowerLeftCorner = origin - horizontalVector/2.0 - verticalVector/2.0 - new Vec3(0, 0, focalLength);
-            
-            //render:
+            // Camera: 
 
+            var camera = new Camera();
+
+            // Render:
             stdout.WriteLine($"P3\n{imageWidth} {imageHeight}\n255\n");
 
             for (int y = (int)imageHeight-1; y > 0; --y)
@@ -77,18 +71,31 @@ namespace RaytracingInOneWeekend
                 {
                     var u = (double) x / (imageWidth-1);
                     var v = (double) y / (imageHeight-1);
-                    var ray = new Ray(origin, lowerLeftCorner + u*horizontalVector + v*verticalVector - origin);
+                    var ray = camera.GetRay(u, v);
                     var color = RayColor(ray, world);
-                    WriteColor(stdout, color);
+                    WriteColor(stdout, color, 1);
                 }    
             }
 
-            static void WriteColor(StreamWriter stdout, Vec3 color)
+            static void WriteColor(StreamWriter stdout, Vec3 color, int samplesPerPixel)
             {
-                var intR = (int) (255.99 * color.R);
-                var intG = (int) (255.99 * color.G);
-                var intB = (int) (255.99 * color.B);
-                stdout.WriteLine($"{intR} {intG} {intB}");
+                var r = color.R;
+                var g = color.G;
+                var b = color.B;
+                
+                // Divide the color by the number of samples.
+                var scale = 1.0 / samplesPerPixel;
+                r *= scale;
+                g *= scale;
+                b *= scale;
+
+                stdout.WriteLine(
+                    $"{ComputePixel(r)} {ComputePixel(g)} {ComputePixel(b)}");
+            }
+
+            static int ComputePixel(double channelValue)
+            {
+                return (int) (256 * Math.Clamp(channelValue, 0, 0.999));
             }
             
             stdout.Close();

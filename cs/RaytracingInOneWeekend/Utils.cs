@@ -9,5 +9,19 @@ namespace RaytracingInOneWeekend
         {
             return degrees * (Math.PI / 180.0);
         }
+        
+        static readonly Random Randomizer = new Random();
+
+        public static double RandomDouble()
+        {
+            // Returns a random real in [0,1).
+            return Randomizer.NextDouble();
+        }
+        
+        public static double RandomDouble(double min, double max)
+        {
+            // Returns a random real in [0,1).
+            return min + (max - min) * RandomDouble();
+        }
     }
 }

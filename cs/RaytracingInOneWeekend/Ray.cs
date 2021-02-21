@@ -1,6 +1,6 @@
 namespace RaytracingInOneWeekend
 {
-    readonly struct Ray
+    public readonly struct Ray
     {
         public Vec3 Origin { get; }
         public Vec3 Direction { get; }
