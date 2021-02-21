@@ -49,6 +49,7 @@ namespace RaytracingInOneWeekend
             var aspectRatio = 16.0 / 9.0;
             var imageWidth = 400;
             var imageHeight = imageWidth / aspectRatio;
+            var samplesPerPixel = 50;
             
             // World:
             var world = new HitableItems(new Hitable[]
@@ -69,11 +70,17 @@ namespace RaytracingInOneWeekend
                 stderr.Write($"Scanlines remaining: {y} \r");
                 for (int x = 0; x < imageWidth; x++)
                 {
-                    var u = (double) x / (imageWidth-1);
-                    var v = (double) y / (imageHeight-1);
-                    var ray = camera.GetRay(u, v);
-                    var color = RayColor(ray, world);
-                    WriteColor(stdout, color, 1);
+                    var pixelColor = new Vec3(0, 0, 0);
+                    for (int sample = 0; sample < samplesPerPixel; sample++)
+                    {
+                        var u = (x + Utils.RandomDouble()) / (imageWidth-1);
+                        var v = (y + Utils.RandomDouble()) / (imageHeight-1);
+                        var ray = camera.GetRay(u, v);
+                        var rayColor = RayColor(ray, world);
+                        pixelColor += rayColor;
+                    }
+                    
+                    WriteColor(stdout, pixelColor, samplesPerPixel);
                 }    
             }
 
